@@ -1,8 +1,9 @@
 
 import Grid from '@mui/material/Grid';
-import { Form, useForm } from './Form';
-import { Control } from './control';
-import { getDepartmentCollection } from '../services/employeeServices';
+import { Form } from './Form';
+import { useForm } from './useForm'
+import { Control } from './components/control';
+import { getDepartmentCollection } from '../../../services/employeeServices';
 
 
 const initialFValues = {
@@ -27,6 +28,7 @@ const EmployeeForm = () => {
         if(validate()){
             setValues(initialFValues)
             setSuccessOpen(true)
+            
         } else {
             setFailOpen(true)
         }
@@ -124,7 +126,7 @@ const EmployeeForm = () => {
                         <Control.Button variant="contained" type="submit" >Submit</Control.Button>
                     </Grid>
                     <Grid item >
-                        <Control.Button variant="contained">Reset</Control.Button>
+                        <Control.Button variant="contained" onClick={handleResetClick}>Reset</Control.Button>
                         <Control.SnackBar open={successOpen} onClose={()=> setSuccessOpen(false)} color="success" message="Success!"/>
                         <Control.SnackBar open={failOpen} onClose={()=> setFailOpen(false)} color="error" message="Fail!"/>
 

@@ -3,10 +3,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 
-import { SideMenu } from '../components/SideMenu';
-import { Header } from '../components/Header';
-import { PageHeader } from '../components/PageHeader';
-import { Employee } from '../pages/Employee';
+import { SideMenu } from './sideMenu/SideMenu';
+import { Header } from './header/Header';
+import { Employee } from './employee/Employee';
 
 const theme = createTheme({
     shape: {

@@ -2,8 +2,8 @@ import PeopleIcon from '@mui/icons-material/People';
 import Paper from '@mui/material/Paper';
 
 
-import EmployeeForm from "./EmployeeForm";
-import { PageHeader } from "../components/PageHeader";
+import EmployeeForm from "./employeeForm/EmployeeForm";
+import { PageHeader } from "./PageHeader";
 
 export const Employee = () => {
     return(
