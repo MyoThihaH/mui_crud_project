@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 
 export const useForm = (initialFvalues) => {
@@ -10,7 +10,6 @@ export const useForm = (initialFvalues) => {
 
     const validate = (name, value) => {
         const temp = {...error};
-        console.log(value)
         
         switch(name){
             case 'fullName': temp.fullName = value.trim()?"":"This field is require";console.log(value);break;
@@ -18,7 +17,6 @@ export const useForm = (initialFvalues) => {
             case 'mobile': temp.mobile = /^[0-9]{9,12}$/.test(value)?"":"Mobile Number should be between (9-12) range";break;
             case 'city': temp.city = value.trim()?"":"This field is require";break;
             case 'departmentId': temp.departmentId = value!=0?"":"None should not be";break;
-            
         }
         // temp.fullName = values.fullName?"":"This field is require";
         // temp.email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)?"":"Email format is wrong";
@@ -28,7 +26,7 @@ export const useForm = (initialFvalues) => {
         setError({
             ...temp
         });
-        return Object.values(temp).every(item => item=="") && Object.values(temp).length!=0
+        return Object.values(temp).every(item => item=="") && Object.values(temp).length==5
     }
     
     const handleOnChange = (event) => {

@@ -1,9 +1,11 @@
 
+import Typography from '@mui/material/Typography';
+import { makeStyles } from '@mui/styles';
 import Grid from '@mui/material/Grid';
 import { Form } from './Form';
 import { useForm } from './useForm'
 import { Control } from './components/control';
-import { getDepartmentCollection } from '../../../services/employeeServices';
+import * as Services from '../../../services/employeeServices';
 
 
 const initialFValues = {
@@ -18,9 +20,14 @@ const initialFValues = {
     isPermanent: false
 };
 
-
+const useStyle = makeStyles({
+    snackBar:{
+        color:"red !important"
+    }
+})
 
 const EmployeeForm = () => {
+    const classes = useStyle();
     const { values, setValues, handleOnChange, validate, error, setError, successOpen, setSuccessOpen, failOpen, setFailOpen } = useForm(initialFValues);
     
     const handleSubmit = (e) => {
@@ -28,6 +35,7 @@ const EmployeeForm = () => {
         if(validate()){
             setValues(initialFValues)
             setSuccessOpen(true)
+            Services.insertEmployee(values)
             
         } else {
             setFailOpen(true)
@@ -95,7 +103,7 @@ const EmployeeForm = () => {
                    <Control.Select
                     name='departmentId' 
                     value={values.departmentId}
-                    departments={getDepartmentCollection()}
+                    departments={Services.getDepartmentCollection()}
                     label="Department"
                     error = {error.departmentId?true:false}
                     helpertext = {error.departmentId}
@@ -127,14 +135,12 @@ const EmployeeForm = () => {
                     </Grid>
                     <Grid item >
                         <Control.Button variant="contained" onClick={handleResetClick}>Reset</Control.Button>
-                        <Control.SnackBar open={successOpen} onClose={()=> setSuccessOpen(false)} color="success" message="Success!"/>
-                        <Control.SnackBar open={failOpen} onClose={()=> setFailOpen(false)} color="error" message="Fail!"/>
-
+                        <Control.SnackBar open={successOpen} onClose={()=> setSuccessOpen(false)} color="white" backgroundColor="green" message="Success!"/>
+                        <Control.SnackBar open={failOpen} onClose={()=> setFailOpen(false)} color="black" backgroundColor="red" message="Error! please fill all field"/>
                     </Grid>   
                 </Grid>
-
-               
            </Grid>
+        <Typography paragraph>{JSON.stringify(Services.getAllEmployee())}</Typography>
        </Form>
     )
 }
