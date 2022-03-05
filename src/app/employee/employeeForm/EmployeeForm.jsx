@@ -26,7 +26,8 @@ const useStyle = makeStyles({
     }
 })
 
-const EmployeeForm = () => {
+const EmployeeForm = (props) => {
+    const { reRender, setReRender} = props;
     const classes = useStyle();
     const { values, setValues, handleOnChange, validate, error, setError, successOpen, setSuccessOpen, failOpen, setFailOpen } = useForm(initialFValues);
     
@@ -36,6 +37,7 @@ const EmployeeForm = () => {
             setValues(initialFValues)
             setSuccessOpen(true)
             Services.insertEmployee(values)
+            setReRender(!reRender);
             
         } else {
             setFailOpen(true)
@@ -140,7 +142,7 @@ const EmployeeForm = () => {
                     </Grid>   
                 </Grid>
            </Grid>
-        <Typography paragraph>{JSON.stringify(Services.getAllEmployee())}</Typography>
+       
        </Form>
     )
 }
