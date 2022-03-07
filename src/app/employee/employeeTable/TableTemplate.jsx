@@ -16,11 +16,21 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import Stack from '@mui/material/Stack';
+import AddIcon from '@mui/icons-material/Add';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+
+
+import { Control } from '../../employee/employeeForm/components/control';
+import { SearchBox } from './SearchBox';
+import { EditButton } from './EditButton';
+import EmployeeForm from "../employeeForm/EmployeeForm";
+
 
 // function createData(name, calories, fat, carbs, protein) {
 //   return {
@@ -135,7 +145,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align="center"
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -168,7 +178,13 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
+  const { numSelected, tableName, selected, setSelected, deleteEmployee, setReRender, reRender } = props;
+  const handleDeleteClick = () => {
+      deleteEmployee(selected);
+      
+      setReRender(!reRender);
+      setSelected([])
+  }
 
   return (
     <Toolbar
@@ -197,13 +213,13 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          {tableName}
         </Typography>
       )}
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDeleteClick}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -223,21 +239,31 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function EnhancedTable(props) {
+  const { headCells, rows, defaultOrderBy, tableName, deleteEmployee, setReRender, reRender } = props;
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('fullName');
+  const [orderBy, setOrderBy] = React.useState(defaultOrderBy);
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  
-  const { headCells,rows } = props;
-  console.log(rows)
+  const [filterValue, setFilterValue] = React.useState("");
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [initialFvalues, setInitialFvaluse] = React.useState(null);
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
   
+  const handleEditClick = (event, initialItem) => {
+    setInitialFvaluse(initialItem)
+    setDialogOpen(true)
+    
+
+    
+  }
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = rows.map((n) => n.id);
@@ -248,9 +274,10 @@ export default function EnhancedTable(props) {
   };
 
   const handleClick = (event, name) => {
+    
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
-
+    console.log(event)
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
@@ -265,6 +292,19 @@ export default function EnhancedTable(props) {
     }
 
     setSelected(newSelected);
+  
+  };
+
+  const searchBoxFilter = (data, searchValue) => {
+    if(searchValue === ""){
+      return data;
+    } else {
+      return data.filter((item) => item.fullName.toLowerCase().includes(searchValue))
+    }
+  };
+
+  const handleSearchOnChange = (event) => {
+      setFilterValue(event.target.value)
   };
 
   const handleChangePage = (event, newPage) => {
@@ -276,9 +316,9 @@ export default function EnhancedTable(props) {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
+  const handleAddClick = () => {
+    setDialogOpen(true);
+  }
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -288,8 +328,14 @@ export default function EnhancedTable(props) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+      <Paper sx={{ width: '98%', mb: 2, border:'2px solid #f7f3f2 !important', padding:'10px', margin:'auto' }}>
+        <Stack direction="row-reverse" spacing={2}>
+          <Control.Button startIcon={<AddIcon/>} onClick={handleAddClick}>Add</Control.Button>
+          <SearchBox sx={{width:"90%"}} onChange={handleSearchOnChange} placeHolder="Search by Full Name" value={filterValue}/>
+          
+        </Stack>
+        
+        <EnhancedTableToolbar numSelected={selected.length} tableName={tableName} selected={selected} deleteEmployee={deleteEmployee} setReRender={setReRender} reRender={reRender} setSelected={setSelected}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -308,7 +354,7 @@ export default function EnhancedTable(props) {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(searchBoxFilter(rows,filterValue), getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -317,7 +363,6 @@ export default function EnhancedTable(props) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -326,30 +371,20 @@ export default function EnhancedTable(props) {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
+                          
+                          onClick={(event) => handleClick(event, row.id)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
                             'aria-labelledby': labelId,
                           }}
                         />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.id}
-                      </TableCell>
-                      <TableCell align="right">{row.fullName}</TableCell>
-                      <TableCell align="right">{row.email}</TableCell>
-                      <TableCell align="right">{row.mobile}</TableCell>
-                      <TableCell align="right">{row.city}</TableCell>
-                      <TableCell align="right">{row.gender}</TableCell>
-                      <TableCell align="right">{row.departmentId}</TableCell>
-                      <TableCell align="right">{row.hireDate}</TableCell>
-                      <TableCell align="right">{row.isPermanent}</TableCell>
 
+                      </TableCell>
+                      {Object.keys(row).map((key) => {
+                        return <TableCell align="center" key={key}>{row[key]}</TableCell>
+                      })}
+                      <TableCell align="center"><EditButton onClick={(e) => handleEditClick(e, row)}/></TableCell>
                     </TableRow>
                   );
                 })}
@@ -374,6 +409,16 @@ export default function EnhancedTable(props) {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+        <Control.Dialog open={dialogOpen} maxWidth="md">
+            <Stack direction="row-reverse" spacing={37}>
+              <DialogActions>
+                <Control.Button onClick={() => {setDialogOpen(false);setInitialFvaluse(null) }}>Close</Control.Button>
+              </DialogActions>
+              <DialogTitle>Employee Form</DialogTitle>
+            </Stack>
+            <DialogContent sx={{width: '90%'}}><EmployeeForm initialValues={initialFvalues} reRender={reRender} setReRender={setReRender}/></DialogContent>
+            
+        </Control.Dialog>
       </Paper>
       {/* <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}

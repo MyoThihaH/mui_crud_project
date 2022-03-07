@@ -14,7 +14,7 @@ export const Employee = () => {
             <Paper variant='outlined' sx={{margin: '20px', padding: '10px'}}>
                 <EmployeeForm reRender={reRender} setReRender={setReRender}/>
             </Paper>
-            <EmployeeTable reRender={reRender}/>
+            <EmployeeTable reRender={reRender} setReRender={setReRender}/>
         </div>
     )
 }

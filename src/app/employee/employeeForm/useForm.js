@@ -7,10 +7,10 @@ export const useForm = (initialFvalues) => {
     const [successOpen, setSuccessOpen] = useState(false);
     const [failOpen, setFailOpen] = useState(false);
     
+    
 
     const validate = (name, value) => {
         const temp = {...error};
-        
         switch(name){
             case 'fullName': temp.fullName = value.trim()?"":"This field is require";console.log(value);break;
             case 'email': temp.email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)?"":"Email format is wrong";break;
@@ -18,6 +18,7 @@ export const useForm = (initialFvalues) => {
             case 'city': temp.city = value.trim()?"":"This field is require";break;
             case 'departmentId': temp.departmentId = value!=0?"":"None should not be";break;
         }
+
         // temp.fullName = values.fullName?"":"This field is require";
         // temp.email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)?"":"Email format is wrong";
         // temp.mobile = /(\d{9,12})/.test(values.mobile)?"":"Mobile No should be between (9-12) range";
@@ -26,7 +27,7 @@ export const useForm = (initialFvalues) => {
         setError({
             ...temp
         });
-        return Object.values(temp).every(item => item=="") && Object.values(temp).length==5
+        return Object.values(temp).every(item => item=="") || (Object.values(temp).every(item => item=="") && Object.values(values).every((item) => item!=""))
     }
     
     const handleOnChange = (event) => {

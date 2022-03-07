@@ -5,6 +5,7 @@ import { CheckBox } from './CheckBox';
 import { DatePicker } from './DatePicker';
 import { Button } from './Button';
 import { SnackBar } from './SnackBar';
+import { myDialog } from './Dialog';
 export const Control = {
     Input,
     Radio: MyRadio,
@@ -12,5 +13,6 @@ export const Control = {
     CheckBox,
     DatePicker,
     Button,
-    SnackBar
+    SnackBar,
+    Dialog: myDialog
 }

@@ -35,3 +35,19 @@ export const generateId = () => {
    localStorage.setItem(KEYS.employeeId,(++id).toString())
    return id;
 }
+
+export const deleteEmployee = ( idArr ) => {
+    const employee = getAllEmployee();
+    const newEmployee = employee.filter((item) => !idArr.includes(item.id))
+    localStorage.setItem(KEYS.employees,JSON.stringify(newEmployee));
+
+}
+
+export const updateEmployee = ( data ) => {
+    const employee  = getAllEmployee();
+    const d = employee.filter((item, index) => item.id == data.id );
+    const index = employee.indexOf(d[0]);
+    employee[index] = data;
+    localStorage.setItem(KEYS.employees,JSON.stringify(employee));
+
+}

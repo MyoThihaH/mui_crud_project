@@ -27,26 +27,33 @@ const useStyle = makeStyles({
 })
 
 const EmployeeForm = (props) => {
-    const { reRender, setReRender} = props;
+    const { reRender, setReRender, initialValues} = props;
+    const valuesF = initialValues?initialValues:initialFValues;
     const classes = useStyle();
-    const { values, setValues, handleOnChange, validate, error, setError, successOpen, setSuccessOpen, failOpen, setFailOpen } = useForm(initialFValues);
+    const { values, setValues, handleOnChange, validate, error, setError, successOpen, setSuccessOpen, failOpen, setFailOpen } = useForm(valuesF);
     
     const handleSubmit = (e) => {
         e.preventDefault()
-        if(validate()){
-            setValues(initialFValues)
-            setSuccessOpen(true)
-            Services.insertEmployee(values)
+        console.log(initialValues)
+        if(validate() && !initialValues){
+            setValues(initialFValues);
+            setSuccessOpen(true);
+            Services.insertEmployee(values);
             setReRender(!reRender);
             
+        } else if(validate() && initialValues){
+            setValues(initialFValues);
+            setSuccessOpen(true);
+            Services.updateEmployee(values);
+            setReRender(!reRender);
         } else {
-            setFailOpen(true)
+            setFailOpen(true);
         }
         
     }
     const handleResetClick = () => {
-        setValues(initialFValues)
-        setError({})
+        setValues(initialFValues);
+        setError({});
     }
     return(
        <Form onSubmit={handleSubmit}>
@@ -94,7 +101,7 @@ const EmployeeForm = (props) => {
                 </Grid>
                </Grid>
                <Grid item container xs={6} direction='column' justifyContent="space-evenly">
-                <Grid item sx={{height:'90px'}}>
+                <Grid item sx={{height:'105px'}}>
                     <Control.Radio
                     name='gender'
                     value={values.gender}

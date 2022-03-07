@@ -1,83 +1,81 @@
 import TableTemplate from './TableTemplate';
-import { getAllEmployee } from '../../../services/employeeServices';
-import { useState } from 'react'
-function createData(name, calories, fat, carbs, protein) {
-    return {
-      name,
-      calories,
-      fat,
-      carbs,
-      protein,
-    };
-  }
+import { getAllEmployee, deleteEmployee } from '../../../services/employeeServices';
+
+
 
 const headCells = [
   {
     id: 'id',
     numeric: false,
     disablePadding: true,
-    label: 'ID',
+    label: '_ID ',
   },
-
+  
   {
     id: 'fullName',
     numeric: true,
-    disablePadding: false,
+    disablePadding: true,
     label: 'Full Name',
   },
   {
     id: 'email',
     numeric: false,
-    disablePadding: false,
+    disablePadding: true,
     label: 'Email',
   },
   {
     id: 'mobile',
     numeric: true,
-    disablePadding: false,
+    disablePadding: true,
     label: 'Mobile',
   },
   {
     id: 'city',
     numeric: false,
-    disablePadding: false,
+    disablePadding: true,
     label: 'City',
   },
   {
     id: 'gender',
-    numeric: true,
-    disablePadding: false,
+    numeric: false,
+    disablePadding: true,
     label: 'Gender',
   },
   {
     id: 'departmentId',
     numeric: true,
-    disablePadding: false,
+    disablePadding: true,
     label: 'DerpartmentId',
   },
   {
     id: 'hireDate',
-    numeric: false,
-    disablePadding: false,
+    numeric: true,
+    disablePadding: true,
     label: 'Hire Date',
   },
   {
     id: 'isPermanent',
     numeric: true,
-    disablePadding: false,
+    disablePadding: true,
     label: 'Permanent',
   },
+  {
+    id: 'edit',
+    numeric: true,
+    disablePadding: true,
+    label: ""
+  }
 ];
 
 
 
 
 export const EmployeeTable = (props) => {
-  const { reRender } = props;
+  const { reRender, setReRender } = props;
   
   
   return(
-    <TableTemplate headCells={headCells} rows={getAllEmployee()} reRender={reRender}/>
+    <TableTemplate headCells={headCells} rows={getAllEmployee()} reRender={reRender} defaultOrderBy="id" tableName="Employee" deleteEmployee={deleteEmployee} setReRender={setReRender}/>
   )
 }
 
