@@ -24,12 +24,15 @@ import AddIcon from '@mui/icons-material/Add';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import { makeStyles } from '@mui/styles';
 
 
 import { Control } from '../../employee/employeeForm/components/control';
 import { SearchBox } from './SearchBox';
 import { EditButton } from './EditButton';
 import EmployeeForm from "../employeeForm/EmployeeForm";
+
+
 
 
 // function createData(name, calories, fat, carbs, protein) {
@@ -132,6 +135,7 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
+          <Tooltip title="Select All">
           <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -141,6 +145,7 @@ function EnhancedTableHead(props) {
               'aria-label': 'select all desserts',
             }}
           />
+          </Tooltip>
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -179,11 +184,17 @@ EnhancedTableHead.propTypes = {
 
 const EnhancedTableToolbar = (props) => {
   const { numSelected, tableName, selected, setSelected, deleteEmployee, setReRender, reRender } = props;
+  const [confirm, setConfirm] = React.useState({});
+  
   const handleDeleteClick = () => {
-      deleteEmployee(selected);
+      setConfirm({title:"Are you sure to delete?", subtitle:"This can't get back", open:true, onConfirm:handleComfirm})
       
-      setReRender(!reRender);
-      setSelected([])
+  }
+
+  const handleComfirm = () => {
+    deleteEmployee(selected);
+    setReRender(!reRender);
+    setSelected([])
   }
 
   return (
@@ -230,6 +241,9 @@ const EnhancedTableToolbar = (props) => {
           </IconButton>
         </Tooltip>
       )}
+      <Control.ConfirmDialog confirm={confirm} setConfirm={setConfirm}/>
+
+     
     </Toolbar>
   );
 };
@@ -299,7 +313,7 @@ export default function EnhancedTable(props) {
     if(searchValue === ""){
       return data;
     } else {
-      return data.filter((item) => item.fullName.toLowerCase().includes(searchValue))
+      return data.filter((item) => item.fullName.toLowerCase().includes(searchValue.toLowerCase()))
     }
   };
 
@@ -328,7 +342,7 @@ export default function EnhancedTable(props) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '98%', mb: 2, border:'2px solid #f7f3f2 !important', padding:'10px', margin:'auto' }}>
+      <Paper sx={{ width: '98%', mb: 2, border:'2px solid #f7f3f2 !important', padding:'10px', margin:'10px 10px 10px 10px' }}>
         <Stack direction="row-reverse" spacing={2}>
           <Control.Button startIcon={<AddIcon/>} onClick={handleAddClick}>Add</Control.Button>
           <SearchBox sx={{width:"90%"}} onChange={handleSearchOnChange} placeHolder="Search by Full Name" value={filterValue}/>
@@ -370,8 +384,8 @@ export default function EnhancedTable(props) {
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
+                        <Tooltip title="select">
                         <Checkbox
-                          
                           onClick={(event) => handleClick(event, row.id)}
                           color="primary"
                           checked={isItemSelected}
@@ -379,12 +393,17 @@ export default function EnhancedTable(props) {
                             'aria-labelledby': labelId,
                           }}
                         />
+                        </Tooltip>
 
                       </TableCell>
                       {Object.keys(row).map((key) => {
                         return <TableCell align="center" key={key}>{row[key]}</TableCell>
                       })}
-                      <TableCell align="center"><EditButton onClick={(e) => handleEditClick(e, row)}/></TableCell>
+                      <TableCell align="center">
+                        
+                          <EditButton onClick={(e) => handleEditClick(e, row)} toolTip="Edit"/>
+                        
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -416,9 +435,13 @@ export default function EnhancedTable(props) {
               </DialogActions>
               <DialogTitle>Employee Form</DialogTitle>
             </Stack>
-            <DialogContent sx={{width: '90%'}}><EmployeeForm initialValues={initialFvalues} reRender={reRender} setReRender={setReRender}/></DialogContent>
+            <DialogContent sx={{width: '90%'}}>
+              <EmployeeForm initialValues={initialFvalues} reRender={reRender} setReRender={setReRender}/>
+            </DialogContent>
             
         </Control.Dialog>
+       
+       
       </Paper>
       {/* <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}

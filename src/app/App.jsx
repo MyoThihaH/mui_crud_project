@@ -7,6 +7,8 @@ import { SideMenu } from './sideMenu/SideMenu';
 import { Header } from './header/Header';
 import { Employee } from './employee/Employee';
 
+import { Test } from './Text';
+
 const theme = createTheme({
     shape: {
         borderRadius: '10px'

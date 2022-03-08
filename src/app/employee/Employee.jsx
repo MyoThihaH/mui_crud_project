@@ -11,9 +11,7 @@ export const Employee = () => {
     return(
         <div>
             <PageHeader title="User" subtitle="This is users" icon={<PeopleIcon/>}/>
-            <Paper variant='outlined' sx={{margin: '20px', padding: '10px'}}>
-                <EmployeeForm reRender={reRender} setReRender={setReRender}/>
-            </Paper>
+            
             <EmployeeTable reRender={reRender} setReRender={setReRender}/>
         </div>
     )

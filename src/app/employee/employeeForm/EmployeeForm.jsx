@@ -1,11 +1,13 @@
 
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import Grid from '@mui/material/Grid';
 import { Form } from './Form';
-import { useForm } from './useForm'
+import { useForm } from './useForm';
 import { Control } from './components/control';
 import * as Services from '../../../services/employeeServices';
+import { ConfirmationNumber } from '@mui/icons-material';
 
 
 const initialFValues = {
@@ -17,7 +19,7 @@ const initialFValues = {
     gender:'male',
     departmentId: "",
     hireDate: new Date(),
-    isPermanent: false
+    isPermanent: "false"
 };
 
 const useStyle = makeStyles({
@@ -31,32 +33,40 @@ const EmployeeForm = (props) => {
     const valuesF = initialValues?initialValues:initialFValues;
     const classes = useStyle();
     const { values, setValues, handleOnChange, validate, error, setError, successOpen, setSuccessOpen, failOpen, setFailOpen } = useForm(valuesF);
-    
+    const [confirm, setConfirm] = useState({title:"Are you sure to submit?", subtitle:"This will be update",open:false, })
+
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(initialValues)
+        console.log(confirm)
+        setConfirm({...confirm,open: true, onConfirm: submitValidate});
+    }
+
+    const submitValidate = () => {
         if(validate() && !initialValues){
             setValues(initialFValues);
             setSuccessOpen(true);
             Services.insertEmployee(values);
             setReRender(!reRender);
             
+            
         } else if(validate() && initialValues){
+            
             setValues(initialFValues);
             setSuccessOpen(true);
             Services.updateEmployee(values);
             setReRender(!reRender);
+            
+
         } else {
             setFailOpen(true);
         }
-        
     }
     const handleResetClick = () => {
         setValues(initialFValues);
         setError({});
     }
     return(
-       <Form onSubmit={handleSubmit}>
+       <Form onSubmit={handleSubmit} >
            <Grid container>
                <Grid item direction ='column' container xs={6}>
                 <Grid item  >
@@ -139,13 +149,16 @@ const EmployeeForm = (props) => {
               
                     
                 <Grid item container direction='row-reverse' >
-                    <Grid item sx={{marginRight:'80px'}}>
+                    <Grid item sx={{marginRight:"10px"}}>
                         <Control.Button variant="contained" type="submit" >Submit</Control.Button>
                     </Grid>
                     <Grid item >
                         <Control.Button variant="contained" onClick={handleResetClick}>Reset</Control.Button>
                         <Control.SnackBar open={successOpen} onClose={()=> setSuccessOpen(false)} color="white" backgroundColor="green" message="Success!"/>
                         <Control.SnackBar open={failOpen} onClose={()=> setFailOpen(false)} color="black" backgroundColor="red" message="Error! please fill all field"/>
+                        <Control.ConfirmDialog confirm={confirm} setConfirm={setConfirm} />
+        
+
                     </Grid>   
                 </Grid>
            </Grid>

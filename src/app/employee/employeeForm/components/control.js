@@ -6,6 +6,8 @@ import { DatePicker } from './DatePicker';
 import { Button } from './Button';
 import { SnackBar } from './SnackBar';
 import { myDialog } from './Dialog';
+import { ConfirmDialog } from './ConfirmDialog';
+
 export const Control = {
     Input,
     Radio: MyRadio,
@@ -14,5 +16,6 @@ export const Control = {
     DatePicker,
     Button,
     SnackBar,
-    Dialog: myDialog
+    Dialog: myDialog,
+    ConfirmDialog
 }
