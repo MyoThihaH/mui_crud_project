@@ -32,8 +32,8 @@ const EmployeeForm = (props) => {
     const { reRender, setReRender, initialValues} = props;
     const valuesF = initialValues?initialValues:initialFValues;
     const classes = useStyle();
-    const { values, setValues, handleOnChange, validate, error, setError, successOpen, setSuccessOpen, failOpen, setFailOpen } = useForm(valuesF);
-    const [confirm, setConfirm] = useState({title:"Are you sure to submit?", subtitle:"This will be update",open:false, })
+    const { values, setValues, handleOnChange, validate, error, setError, successOpen, setSuccessOpen, failOpen, setFailOpen, confirm, setConfirm } = useForm(valuesF);
+    //const [confirm, setConfirm] = useState({title:"Are you sure to submit?", subtitle:"This will be update",open:false, })
 
     const handleSubmit = (e) => {
         e.preventDefault()

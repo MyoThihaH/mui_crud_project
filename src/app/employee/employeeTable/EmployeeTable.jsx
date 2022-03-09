@@ -59,12 +59,7 @@ const headCells = [
     disablePadding: true,
     label: 'Permanent',
   },
-  {
-    id: 'edit',
-    numeric: true,
-    disablePadding: true,
-    label: ""
-  }
+
 ];
 
 
@@ -75,7 +70,14 @@ export const EmployeeTable = (props) => {
   
   
   return(
-    <TableTemplate headCells={headCells} rows={getAllEmployee()} reRender={reRender} defaultOrderBy="id" tableName="Employee" deleteEmployee={deleteEmployee} setReRender={setReRender}/>
+    <TableTemplate 
+    headCells={headCells} 
+    rows={getAllEmployee()} 
+    reRender={reRender} 
+    defaultOrderBy="id" 
+    tableName="Employee" 
+    deleteEmployee={deleteEmployee} 
+    setReRender={setReRender}/>
   )
 }
 

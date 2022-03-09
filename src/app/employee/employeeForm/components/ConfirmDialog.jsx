@@ -18,6 +18,8 @@ const useStyle = makeStyles({
         }
     },
     dialogContent: {
+        color:"yellow",
+        backgroundColor:"black",
         textAlign: "center !important"
     },
     dialogAction: {
