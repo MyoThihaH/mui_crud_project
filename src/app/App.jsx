@@ -40,11 +40,12 @@ const App = () => {
     const classes = useStyle();
     return(
         <ThemeProvider theme={theme}>
-            <SideMenu/>
-            <div className={classes.appMain}>
+            
+            
                 <Header/>
                 <Employee/>
-            </div>
+                
+           
             <CssBaseline/>
         </ThemeProvider>
             

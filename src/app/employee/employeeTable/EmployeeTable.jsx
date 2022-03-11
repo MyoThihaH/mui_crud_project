@@ -8,7 +8,7 @@ const headCells = [
     id: 'id',
     numeric: false,
     disablePadding: true,
-    label: '_ID ',
+    label: 'ID_',
   },
   
   {
@@ -42,10 +42,10 @@ const headCells = [
     label: 'Gender',
   },
   {
-    id: 'departmentId',
+    id: 'department',
     numeric: true,
     disablePadding: true,
-    label: 'DerpartmentId',
+    label: 'Derpartment',
   },
   {
     id: 'hireDate',

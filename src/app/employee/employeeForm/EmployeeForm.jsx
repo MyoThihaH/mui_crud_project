@@ -7,7 +7,7 @@ import { Form } from './Form';
 import { useForm } from './useForm';
 import { Control } from './components/control';
 import * as Services from '../../../services/employeeServices';
-import { ConfirmationNumber } from '@mui/icons-material';
+
 
 
 const initialFValues = {
@@ -36,20 +36,22 @@ const EmployeeForm = (props) => {
     //const [confirm, setConfirm] = useState({title:"Are you sure to submit?", subtitle:"This will be update",open:false, })
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log(confirm)
-        setConfirm({...confirm,open: true, onConfirm: submitValidate});
+        e.preventDefault();
+        if(validate()){
+            setConfirm({...confirm,open: true, onConfirm: submitValidate})
+        }
+        
     }
 
     const submitValidate = () => {
-        if(validate() && !initialValues){
+        if(!initialValues){
             setValues(initialFValues);
             setSuccessOpen(true);
             Services.insertEmployee(values);
             setReRender(!reRender);
             
             
-        } else if(validate() && initialValues){
+        } else if(initialValues){
             
             setValues(initialFValues);
             setSuccessOpen(true);

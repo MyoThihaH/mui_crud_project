@@ -10,7 +10,7 @@ export const Employee = () => {
     const [reRender, setReRender] = useState(true);
     return(
         <div>
-            <PageHeader title="User" subtitle="This is users" icon={<PeopleIcon/>}/>
+            <PageHeader title="Admin" subtitle="This is admin panel" icon={<PeopleIcon/>}/>
             
             <EmployeeTable reRender={reRender} setReRender={setReRender}/>
         </div>

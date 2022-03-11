@@ -21,6 +21,7 @@ import { Control } from '../employeeForm/components/control';
 import { SearchBox } from './components/SearchBox';
 import { EditButton } from './components/EditButton';
 import EmployeeForm from "../employeeForm/EmployeeForm";
+import { getDepartmentCollection } from '../../../services/employeeServices';
 
 
 
@@ -57,7 +58,7 @@ function stableSort(array, comparator) {
 }
 
 export default function EnhancedTable(props) {
-  const { headCells, rows, defaultOrderBy, tableName, deleteEmployee, setReRender, reRender } = props;
+  const { headCells, rows:initialRow, defaultOrderBy, tableName, deleteEmployee, setReRender, reRender } = props;
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState(defaultOrderBy);
   const [selected, setSelected] = React.useState([]);
@@ -68,6 +69,23 @@ export default function EnhancedTable(props) {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [initialFvalues, setInitialFvaluse] = React.useState(null);
 
+  const department = getDepartmentCollection();
+  const rows = initialRow.map((item) => {
+    return (
+      {
+        id: item.id,
+        fullName: item.fullName,
+        email: item.email,
+        mobile: item.mobile,
+        city: item.city,
+        gender: item.gender,
+        departmentId: department[parseInt(item.departmentId)].title,
+        hireDate: item.hireDate,
+        isPermanent: item.isPermanent,
+        
+      }
+    )
+  });
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -92,7 +110,6 @@ export default function EnhancedTable(props) {
     
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
-    console.log(event)
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
@@ -146,7 +163,7 @@ export default function EnhancedTable(props) {
       <Paper sx={{ width: '98%', mb: 2, border:'2px solid #f7f3f2 !important', padding:'10px', margin:'10px 10px 10px 10px' }}>
         <Stack direction="row-reverse" spacing={2}>
           <Control.Button startIcon={<AddIcon/>} onClick={handleAddClick}>Add</Control.Button>
-          <SearchBox sx={{width:"90%"}} onChange={handleSearchOnChange} placeHolder="Search by Full Name" value={filterValue}/>
+          <SearchBox sx={{width:"91%"}} onChange={handleSearchOnChange} placeHolder="Search by Full Name" value={filterValue}/>
           
         </Stack>
         
@@ -167,8 +184,7 @@ export default function EnhancedTable(props) {
               headCells={headCells}
             />
             <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.slice().sort(getComparator(order, orderBy)) */}
+              
               {stableSort(searchBoxFilter(rows,filterValue), getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
@@ -239,15 +255,9 @@ export default function EnhancedTable(props) {
             <DialogContent sx={{width: '90%'}}>
               <EmployeeForm initialValues={initialFvalues} reRender={reRender} setReRender={setReRender}/>
             </DialogContent>
-            
         </Control.Dialog>
-       
-       
+
       </Paper>
-      {/* <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      /> */}
     </Box>
   );
 }

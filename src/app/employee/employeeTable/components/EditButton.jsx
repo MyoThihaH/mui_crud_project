@@ -6,8 +6,8 @@ export const EditButton = (props) => {
     const { onClick, toolTip } = props;
     return(
         <Tooltip title={toolTip}>
-        <IconButton>
-            <EditIcon onClick={onClick}/>
+        <IconButton onClick={onClick}>
+            <EditIcon />
         </IconButton>
         </Tooltip>
     )
