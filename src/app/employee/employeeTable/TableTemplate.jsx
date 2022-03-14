@@ -79,7 +79,7 @@ export default function EnhancedTable(props) {
         mobile: item.mobile,
         city: item.city,
         gender: item.gender,
-        departmentId: department[parseInt(item.departmentId)].title,
+        departmentId: department[parseInt(item.departmentId)]?.title,
         hireDate: item.hireDate,
         isPermanent: item.isPermanent,
         

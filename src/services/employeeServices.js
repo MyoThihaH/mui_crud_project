@@ -3,6 +3,48 @@ const KEYS = {
     employeeId: 'employeeId'
 }
 
+const initialData = [
+    {
+        id:1,
+        fullName: "a",
+        email: "a@gmail.com",
+        mobile: "000000000",
+        city: "Mawlamyine",
+        gender: "male",
+        departmentId: "1",
+        hireDate: new Date(),
+        isPermanent: "true",
+    },
+    {
+        id:2,
+        fullName: "b",
+        email: "b@gmail.com",
+        mobile: "111111111",
+        city: "Yangon",
+        gender: "male",
+        departmentId: "1",
+        hireDate: new Date(),
+        isPermanent: "true",
+    },
+    {
+        id:3,
+        fullName: "c",
+        email: "c@gmail.com",
+        mobile: "111111111",
+        city: "Mandalay",
+        gender: "female",
+        departmentId: "2",
+        hireDate: new Date(),
+        isPermanent: "true",
+    }      
+];
+
+// export const addInitialData = () => {
+//     if(localStorage.getItem(KEYS.employees) == null)
+//     for(let a of initialData){
+//         insertEmployee(a)
+//     }
+// }
 
 
 export const getDepartmentCollection = () => ([
@@ -15,8 +57,11 @@ export const getDepartmentCollection = () => ([
 ])
 
 export const getAllEmployee = () => {
-    if(localStorage.getItem(KEYS.employees) == null) 
-        localStorage.setItem(KEYS.employees, JSON.stringify([]))
+    if(localStorage.getItem(KEYS.employees) == null) {
+        localStorage.setItem(KEYS.employees, JSON.stringify(initialData))
+        localStorage.setItem(KEYS.employeeId,(initialData.length).toString())
+    }
+        
     return JSON.parse(localStorage.getItem(KEYS.employees))
     
 }
