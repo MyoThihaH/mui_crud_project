@@ -36,7 +36,7 @@ const initialData = [
         departmentId: "2",
         hireDate: new Date(),
         isPermanent: "true",
-    }      
+    },      
 ];
 
 // export const addInitialData = () => {

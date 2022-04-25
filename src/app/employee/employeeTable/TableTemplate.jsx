@@ -190,7 +190,8 @@ export default function EnhancedTable(props) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
+                  let [obj] = department.filter((item) => item.title === row.departmentId);
+                  const edit_row = {...row,departmentId: obj.id}
                   return (
                     <TableRow
                       hover
@@ -218,8 +219,11 @@ export default function EnhancedTable(props) {
                       })}
                       <TableCell align="center">
                         
-                          <EditButton onClick={(e) => handleEditClick(e, row)} toolTip="Edit"/>
+                       
                         
+                        
+                          <EditButton onClick={(e) => handleEditClick(e, edit_row)} toolTip="Edit"/>
+                
                       </TableCell>
                     </TableRow>
                   );
